@@ -6,5 +6,5 @@ Save [dmoz](http://www.dmoz.org/) *url-category* pairs to redis. It only saves r
 
 - Execute `npm install` to get dependencies.
 - Execute `grunt` to compile to js.
-- Put [content.rdf.u8](http://rdf.dmoz.org/rdf/content.rdf.u8.gz) under `rdf/.
+- Put [content.rdf.u8](http://rdf.dmoz.org/rdf/content.rdf.u8.gz) under a folder named *rdf*.
 - Execute `node target/app.js`.
