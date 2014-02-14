@@ -1,0 +1,9 @@
+#osx
+.DS_STORE
+
+#node + grunt 
+node_modules
+target
+
+#this project
+rdf
