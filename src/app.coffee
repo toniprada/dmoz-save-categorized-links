@@ -1,36 +1,35 @@
 fs = require 'fs'
 readline = require 'readline'
 stream = require 'stream'
+redis = require 'redis'
 
-TOPIC_REGEX = /<Topic r:id="(.*)".*>/i
-CATID_REGEX = /<catid>([0-9]+)<\/catid>/
+TOPIC_REGEX = /<ExternalPage about="(.*)".*>/
+CATID_REGEX = /<topic>(.*)<\/topic>/
 
-parseStructure = () ->
-  instream = fs.createReadStream('rdf/structure.rdf.u8')
+client = redis.createClient()
+client.on 'error', (err) ->
+  console.log err
+
+parseContent = () ->
+  instream = fs.createReadStream('rdf/content.rdf.u8')
   outstream = new stream
   rl = readline.createInterface(instream, outstream)
 
-  topics = []
-  topic = null
+  url = null
+  count = 0
 
   rl.on 'line', (line) ->
     if TOPIC_REGEX.test(line)
       matches = line.match TOPIC_REGEX
-      topic = {name: matches[1]}
+      url = matches[1]
     if CATID_REGEX.test(line)
       matches = line.match CATID_REGEX
-      topic.id = matches[1]
-      topics.push topic
-
-      console.log topics.length
+      client.set url, matches[1], () ->
+        count++
+        if count%100000==0 then console.log "SAVED #{count/1000}k urls"
 
   rl.on 'close', () ->
     console.log 'close'
-    #fs.writeFile 'out/structure.json', JSON.stringify topics, (err) ->
-    #  if err then console.log err else console.log 'OK saved'
-    return topics
+    process.exit code=0
 
-parseContent
-
-topics = do parseStructure
-
+do parseContent
