@@ -5,6 +5,8 @@ redis = require 'redis'
 
 TOPIC_REGEX = /<ExternalPage about="(.*)".*>/
 CATID_REGEX = /<topic>(.*)<\/topic>/
+URL_REGEX = /^https?\:\/\/[^\/]+\/?$/
+IGNORE_CATEGORY_REGEX = /Top\/World/
 
 client = redis.createClient()
 client.on 'error', (err) ->
@@ -24,9 +26,14 @@ parseContent = () ->
       url = matches[1]
     if CATID_REGEX.test(line)
       matches = line.match CATID_REGEX
-      client.set url, matches[1], () ->
-        count++
-        if count%100000==0 then console.log "SAVED #{count/1000}k urls"
+      category = matches[1]
+      #just save root urls
+      if URL_REGEX.test url
+        #ignore Top/World/* categories
+        unless IGNORE_CATEGORY_REGEX.test category
+          client.set url, category, () ->
+            count++
+            if count%100000==0 then console.log "SAVED #{count/1000}k urls"
 
   rl.on 'close', () ->
     console.log 'close'
