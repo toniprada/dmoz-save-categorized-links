@@ -2,23 +2,20 @@
   "name": "dmoz-save-categorized-links",
   "author": "Toni Prada",
   "email": "toniprada@gmail.com",
-  "description": "Download the dmoz relation between links and categories",
+  "description": "Save Open Directory (dmoz) links and categories ",
   "private": true,
   "main": "app.js",
   "version": "0.0.1",
   "devDependencies": {
-    "supertest": "0.x",
-    "mocha": "1.x",
     "grunt": "~0.4.2",
     "grunt-contrib-coffee": "~0.10.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-coffeelint": "0.0.8",
-    "grunt-cli": "~0.1.13"
+    "grunt-cli": "~0.1.13",
+    "supertest": "~0.9.0",
+    "mocha": "~1.17.1"
   },
   "dependencies": {
-    "express": "3.x",
-    "mongoose": "3.x",
-    "nconf": "0.x",
-    "coffee-script": "1.x"
+    "readline": "0.0.3"
   }
 }
