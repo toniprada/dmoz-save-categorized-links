@@ -12,6 +12,9 @@ module.exports = (grunt) ->
         ]
     coffeelint:
       app: 'src/**/*.coffee'
+      options:
+        max_line_length:
+          value: 120
     watch:
       files: ['Gruntfile.coffee', 'src/**/*.coffee']
       tasks: ['coffeelint', 'coffee']

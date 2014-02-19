@@ -36,9 +36,12 @@ parseContent = () ->
           if host
             if host.slice(-1) == "/" then host = host.slice(0, -1)
             host = host.replace(matchesUrl[2], '').toLowerCase()
-            client.set host, category, () ->
-              count++
-              if count%100000==0 then console.log "SAVED #{count/1000}k urls"
+            # if its already saved check if its a shorter link
+            client.get host , (err, data) ->
+              if !err and (!data or JSON.parse(data).size>url.size)
+                client.set host, JSON.stringify(cat:category, size:url.length), () ->
+                  count++
+                  if count%100000==0 then console.log "SAVED #{count/1000}k urls"
 
   rl.on 'close', () ->
     console.log 'close'
