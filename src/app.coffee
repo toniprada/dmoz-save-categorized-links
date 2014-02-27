@@ -5,6 +5,7 @@ redis = require 'redis'
 
 TOPIC_REGEX = /<ExternalPage about="(.*)".*>/
 CATID_REGEX = /<topic>(.*)<\/topic>/
+TOP_URL_REGEX = /^((https?\:\/\/(www.)?)[^\/]+\/?)$/
 URL_REGEX = /^((https?\:\/\/(www.)?)[^\/]+\/?).*$/
 IGNORE_CATEGORY_REGEX = /Top\/World/
 
@@ -28,15 +29,16 @@ parseContent = () ->
       matches = line.match CATID_REGEX
       category = matches[1]
       #just save root urls
-      if URL_REGEX.test url
+      if TOP_URL_REGEX.test url
         #ignore Top/World/* categories
         unless IGNORE_CATEGORY_REGEX.test category
           matchesUrl = url.match URL_REGEX
           host = matchesUrl[1]
           if host
+            # just save domains without the protocol, www or the end bar
             if host.slice(-1) == "/" then host = host.slice(0, -1)
             host = host.replace(matchesUrl[2], '').toLowerCase()
-            # if its already saved check if its a shorter link
+            # if its already saved check if this is a shorter link
             client.get host , (err, data) ->
               if !err and (!data or JSON.parse(data).size>url.size)
                 client.set host, JSON.stringify(cat:category, size:url.length), () ->
