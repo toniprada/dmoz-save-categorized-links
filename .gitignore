@@ -1,9 +1,8 @@
 #osx
 .DS_STORE
 
-#node + grunt 
+#node
 node_modules
-target
 
 #this project
 rdf

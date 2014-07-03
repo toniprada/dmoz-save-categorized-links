@@ -1,10 +1,14 @@
 # dmoz-save-categorized-links
 
-Save [dmoz](http://www.dmoz.org/) *url-category* pairs to redis. It only saves root urls with categories outside of *Top/World/* (more than 1.5M urls).
+Save [dmoz](http://www.dmoz.org/) URL domains and categories as *key-value* pairs on a Redis database.
+
+## Why?
+
+In case you need to categorize a webpage. This projects uses the [dmoz](http://www.dmoz.org/) content RDF, which with a file size of 1.8GB has to be read line by line.
 
 ## How to
 
 - Execute `npm install` to get dependencies.
-- Execute `grunt` to compile to js.
-- Put [content.rdf.u8](http://rdf.dmoz.org/rdf/content.rdf.u8.gz) under a folder named *rdf*.
-- Execute `node target/app.js`.
+- Put [content.rdf.u8](http://rdf.dmoz.org/rdf/content.rdf.u8.gz) under `*project`.
+- Start your redis server.
+- Execute `coffee app.coffee`.
